@@ -1257,10 +1257,6 @@ func (t CookieExemptionReason) String() string {
 const (
 	CookieExemptionReasonNone                         CookieExemptionReason = "None"
 	CookieExemptionReasonUserSetting                  CookieExemptionReason = "UserSetting"
-	CookieExemptionReasonTPCDMetadata                 CookieExemptionReason = "TPCDMetadata"
-	CookieExemptionReasonTPCDDeprecationTrial         CookieExemptionReason = "TPCDDeprecationTrial"
-	CookieExemptionReasonTopLevelTPCDDeprecationTrial CookieExemptionReason = "TopLevelTPCDDeprecationTrial"
-	CookieExemptionReasonTPCDHeuristics               CookieExemptionReason = "TPCDHeuristics"
 	CookieExemptionReasonEnterprisePolicy             CookieExemptionReason = "EnterprisePolicy"
 	CookieExemptionReasonStorageAccess                CookieExemptionReason = "StorageAccess"
 	CookieExemptionReasonTopLevelStorageAccess        CookieExemptionReason = "TopLevelStorageAccess"
@@ -1278,14 +1274,6 @@ func (t *CookieExemptionReason) UnmarshalJSON(buf []byte) error {
 		*t = CookieExemptionReasonNone
 	case CookieExemptionReasonUserSetting:
 		*t = CookieExemptionReasonUserSetting
-	case CookieExemptionReasonTPCDMetadata:
-		*t = CookieExemptionReasonTPCDMetadata
-	case CookieExemptionReasonTPCDDeprecationTrial:
-		*t = CookieExemptionReasonTPCDDeprecationTrial
-	case CookieExemptionReasonTopLevelTPCDDeprecationTrial:
-		*t = CookieExemptionReasonTopLevelTPCDDeprecationTrial
-	case CookieExemptionReasonTPCDHeuristics:
-		*t = CookieExemptionReasonTPCDHeuristics
 	case CookieExemptionReasonEnterprisePolicy:
 		*t = CookieExemptionReasonEnterprisePolicy
 	case CookieExemptionReasonStorageAccess:
@@ -2027,7 +2015,7 @@ func (t DeviceBoundSessionEventID) String() string {
 }
 
 // DeviceBoundSessionFetchResult a fetch result for a device bound session
-// creation or refresh.
+// creation or refresh. LINT.IfChange(DeviceBoundSessionFetchResult).
 //
 // See: https://chromedevtools.github.io/devtools-protocol/tot/Network#type-DeviceBoundSessionFetchResult
 type DeviceBoundSessionFetchResult string
@@ -2040,8 +2028,10 @@ func (t DeviceBoundSessionFetchResult) String() string {
 // DeviceBoundSessionFetchResult values.
 const (
 	DeviceBoundSessionFetchResultSuccess                                           DeviceBoundSessionFetchResult = "Success"
-	DeviceBoundSessionFetchResultKeyError                                          DeviceBoundSessionFetchResult = "KeyError"
+	DeviceBoundSessionFetchResultSigningKeyGenerationError                         DeviceBoundSessionFetchResult = "SigningKeyGenerationError"
+	DeviceBoundSessionFetchResultAttestationKeyGenerationError                     DeviceBoundSessionFetchResult = "AttestationKeyGenerationError"
 	DeviceBoundSessionFetchResultSigningError                                      DeviceBoundSessionFetchResult = "SigningError"
+	DeviceBoundSessionFetchResultTransientSigningError                             DeviceBoundSessionFetchResult = "TransientSigningError"
 	DeviceBoundSessionFetchResultServerRequestedTermination                        DeviceBoundSessionFetchResult = "ServerRequestedTermination"
 	DeviceBoundSessionFetchResultInvalidSessionID                                  DeviceBoundSessionFetchResult = "InvalidSessionId"
 	DeviceBoundSessionFetchResultInvalidChallenge                                  DeviceBoundSessionFetchResult = "InvalidChallenge"
@@ -2107,6 +2097,7 @@ const (
 	DeviceBoundSessionFetchResultInvalidFederatedSessionProviderFailedToRestoreKey DeviceBoundSessionFetchResult = "InvalidFederatedSessionProviderFailedToRestoreKey"
 	DeviceBoundSessionFetchResultFailedToUnwrapKey                                 DeviceBoundSessionFetchResult = "FailedToUnwrapKey"
 	DeviceBoundSessionFetchResultSessionDeletedDuringRefresh                       DeviceBoundSessionFetchResult = "SessionDeletedDuringRefresh"
+	DeviceBoundSessionFetchResultCrossOriginRegistrationSiteNotIncluded            DeviceBoundSessionFetchResult = "CrossOriginRegistrationSiteNotIncluded"
 )
 
 // UnmarshalJSON satisfies [json.Unmarshaler].
@@ -2117,10 +2108,14 @@ func (t *DeviceBoundSessionFetchResult) UnmarshalJSON(buf []byte) error {
 	switch DeviceBoundSessionFetchResult(s) {
 	case DeviceBoundSessionFetchResultSuccess:
 		*t = DeviceBoundSessionFetchResultSuccess
-	case DeviceBoundSessionFetchResultKeyError:
-		*t = DeviceBoundSessionFetchResultKeyError
+	case DeviceBoundSessionFetchResultSigningKeyGenerationError:
+		*t = DeviceBoundSessionFetchResultSigningKeyGenerationError
+	case DeviceBoundSessionFetchResultAttestationKeyGenerationError:
+		*t = DeviceBoundSessionFetchResultAttestationKeyGenerationError
 	case DeviceBoundSessionFetchResultSigningError:
 		*t = DeviceBoundSessionFetchResultSigningError
+	case DeviceBoundSessionFetchResultTransientSigningError:
+		*t = DeviceBoundSessionFetchResultTransientSigningError
 	case DeviceBoundSessionFetchResultServerRequestedTermination:
 		*t = DeviceBoundSessionFetchResultServerRequestedTermination
 	case DeviceBoundSessionFetchResultInvalidSessionID:
@@ -2251,6 +2246,8 @@ func (t *DeviceBoundSessionFetchResult) UnmarshalJSON(buf []byte) error {
 		*t = DeviceBoundSessionFetchResultFailedToUnwrapKey
 	case DeviceBoundSessionFetchResultSessionDeletedDuringRefresh:
 		*t = DeviceBoundSessionFetchResultSessionDeletedDuringRefresh
+	case DeviceBoundSessionFetchResultCrossOriginRegistrationSiteNotIncluded:
+		*t = DeviceBoundSessionFetchResultCrossOriginRegistrationSiteNotIncluded
 	default:
 		return fmt.Errorf("unknown DeviceBoundSessionFetchResult value: %v", s)
 	}
@@ -2615,14 +2612,15 @@ func (t RefreshEventDetailsRefreshResult) String() string {
 
 // RefreshEventDetailsRefreshResult values.
 const (
-	RefreshEventDetailsRefreshResultRefreshed            RefreshEventDetailsRefreshResult = "Refreshed"
-	RefreshEventDetailsRefreshResultRefreshedAsWaiter    RefreshEventDetailsRefreshResult = "RefreshedAsWaiter"
-	RefreshEventDetailsRefreshResultInitializedService   RefreshEventDetailsRefreshResult = "InitializedService"
-	RefreshEventDetailsRefreshResultUnreachable          RefreshEventDetailsRefreshResult = "Unreachable"
-	RefreshEventDetailsRefreshResultServerError          RefreshEventDetailsRefreshResult = "ServerError"
-	RefreshEventDetailsRefreshResultRefreshQuotaExceeded RefreshEventDetailsRefreshResult = "RefreshQuotaExceeded"
-	RefreshEventDetailsRefreshResultFatalError           RefreshEventDetailsRefreshResult = "FatalError"
-	RefreshEventDetailsRefreshResultSigningQuotaExceeded RefreshEventDetailsRefreshResult = "SigningQuotaExceeded"
+	RefreshEventDetailsRefreshResultRefreshed             RefreshEventDetailsRefreshResult = "Refreshed"
+	RefreshEventDetailsRefreshResultInitializedService    RefreshEventDetailsRefreshResult = "InitializedService"
+	RefreshEventDetailsRefreshResultUnreachable           RefreshEventDetailsRefreshResult = "Unreachable"
+	RefreshEventDetailsRefreshResultServerError           RefreshEventDetailsRefreshResult = "ServerError"
+	RefreshEventDetailsRefreshResultRefreshQuotaExceeded  RefreshEventDetailsRefreshResult = "RefreshQuotaExceeded"
+	RefreshEventDetailsRefreshResultFatalError            RefreshEventDetailsRefreshResult = "FatalError"
+	RefreshEventDetailsRefreshResultSigningQuotaExceeded  RefreshEventDetailsRefreshResult = "SigningQuotaExceeded"
+	RefreshEventDetailsRefreshResultRefreshedAsWaiter     RefreshEventDetailsRefreshResult = "RefreshedAsWaiter"
+	RefreshEventDetailsRefreshResultTransientSigningError RefreshEventDetailsRefreshResult = "TransientSigningError"
 )
 
 // UnmarshalJSON satisfies [json.Unmarshaler].
@@ -2633,8 +2631,6 @@ func (t *RefreshEventDetailsRefreshResult) UnmarshalJSON(buf []byte) error {
 	switch RefreshEventDetailsRefreshResult(s) {
 	case RefreshEventDetailsRefreshResultRefreshed:
 		*t = RefreshEventDetailsRefreshResultRefreshed
-	case RefreshEventDetailsRefreshResultRefreshedAsWaiter:
-		*t = RefreshEventDetailsRefreshResultRefreshedAsWaiter
 	case RefreshEventDetailsRefreshResultInitializedService:
 		*t = RefreshEventDetailsRefreshResultInitializedService
 	case RefreshEventDetailsRefreshResultUnreachable:
@@ -2647,6 +2643,10 @@ func (t *RefreshEventDetailsRefreshResult) UnmarshalJSON(buf []byte) error {
 		*t = RefreshEventDetailsRefreshResultFatalError
 	case RefreshEventDetailsRefreshResultSigningQuotaExceeded:
 		*t = RefreshEventDetailsRefreshResultSigningQuotaExceeded
+	case RefreshEventDetailsRefreshResultRefreshedAsWaiter:
+		*t = RefreshEventDetailsRefreshResultRefreshedAsWaiter
+	case RefreshEventDetailsRefreshResultTransientSigningError:
+		*t = RefreshEventDetailsRefreshResultTransientSigningError
 	default:
 		return fmt.Errorf("unknown RefreshEventDetailsRefreshResult value: %v", s)
 	}

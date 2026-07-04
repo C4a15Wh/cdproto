@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/chromedp/cdproto/cdp"
+	"github.com/go-json-experiment/json/jsontext"
 )
 
 // ID [no description].
@@ -45,6 +46,7 @@ type Info struct {
 	ParentFrameID    cdp.FrameID          `json:"parentFrameId,omitempty,omitzero"` // Id of the parent frame, present for "iframe" and "worker" targets. For nested workers, this is the "ancestor" frame that created the first worker in the nested chain.
 	BrowserContextID cdp.BrowserContextID `json:"browserContextId,omitempty,omitzero"`
 	Subtype          string               `json:"subtype,omitempty,omitzero"` // Provides additional details for specific target types. For example, for the type of "page", this may be set to "prerender".
+	EmbedderData     jsontext.Value       `json:"embedderData,omitempty,omitzero"`
 }
 
 // FilterEntry a filter used by target query/discovery/auto-attach
