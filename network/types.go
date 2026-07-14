@@ -2098,6 +2098,9 @@ const (
 	DeviceBoundSessionFetchResultFailedToUnwrapKey                                 DeviceBoundSessionFetchResult = "FailedToUnwrapKey"
 	DeviceBoundSessionFetchResultSessionDeletedDuringRefresh                       DeviceBoundSessionFetchResult = "SessionDeletedDuringRefresh"
 	DeviceBoundSessionFetchResultCrossOriginRegistrationSiteNotIncluded            DeviceBoundSessionFetchResult = "CrossOriginRegistrationSiteNotIncluded"
+	DeviceBoundSessionFetchResultInvalidPreProvisionedKeyInitiatorMissing          DeviceBoundSessionFetchResult = "InvalidPreProvisionedKeyInitiatorMissing"
+	DeviceBoundSessionFetchResultPreProvisionedKeyAccessNotGranted                 DeviceBoundSessionFetchResult = "PreProvisionedKeyAccessNotGranted"
+	DeviceBoundSessionFetchResultPreProvisionedKeyNotFound                         DeviceBoundSessionFetchResult = "PreProvisionedKeyNotFound"
 )
 
 // UnmarshalJSON satisfies [json.Unmarshaler].
@@ -2248,6 +2251,12 @@ func (t *DeviceBoundSessionFetchResult) UnmarshalJSON(buf []byte) error {
 		*t = DeviceBoundSessionFetchResultSessionDeletedDuringRefresh
 	case DeviceBoundSessionFetchResultCrossOriginRegistrationSiteNotIncluded:
 		*t = DeviceBoundSessionFetchResultCrossOriginRegistrationSiteNotIncluded
+	case DeviceBoundSessionFetchResultInvalidPreProvisionedKeyInitiatorMissing:
+		*t = DeviceBoundSessionFetchResultInvalidPreProvisionedKeyInitiatorMissing
+	case DeviceBoundSessionFetchResultPreProvisionedKeyAccessNotGranted:
+		*t = DeviceBoundSessionFetchResultPreProvisionedKeyAccessNotGranted
+	case DeviceBoundSessionFetchResultPreProvisionedKeyNotFound:
+		*t = DeviceBoundSessionFetchResultPreProvisionedKeyNotFound
 	default:
 		return fmt.Errorf("unknown DeviceBoundSessionFetchResult value: %v", s)
 	}
@@ -2616,7 +2625,6 @@ const (
 	RefreshEventDetailsRefreshResultInitializedService    RefreshEventDetailsRefreshResult = "InitializedService"
 	RefreshEventDetailsRefreshResultUnreachable           RefreshEventDetailsRefreshResult = "Unreachable"
 	RefreshEventDetailsRefreshResultServerError           RefreshEventDetailsRefreshResult = "ServerError"
-	RefreshEventDetailsRefreshResultRefreshQuotaExceeded  RefreshEventDetailsRefreshResult = "RefreshQuotaExceeded"
 	RefreshEventDetailsRefreshResultFatalError            RefreshEventDetailsRefreshResult = "FatalError"
 	RefreshEventDetailsRefreshResultSigningQuotaExceeded  RefreshEventDetailsRefreshResult = "SigningQuotaExceeded"
 	RefreshEventDetailsRefreshResultRefreshedAsWaiter     RefreshEventDetailsRefreshResult = "RefreshedAsWaiter"
@@ -2637,8 +2645,6 @@ func (t *RefreshEventDetailsRefreshResult) UnmarshalJSON(buf []byte) error {
 		*t = RefreshEventDetailsRefreshResultUnreachable
 	case RefreshEventDetailsRefreshResultServerError:
 		*t = RefreshEventDetailsRefreshResultServerError
-	case RefreshEventDetailsRefreshResultRefreshQuotaExceeded:
-		*t = RefreshEventDetailsRefreshResultRefreshQuotaExceeded
 	case RefreshEventDetailsRefreshResultFatalError:
 		*t = RefreshEventDetailsRefreshResultFatalError
 	case RefreshEventDetailsRefreshResultSigningQuotaExceeded:

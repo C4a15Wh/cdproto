@@ -22,6 +22,7 @@ type SetVirtualWalletBehaviorParams struct {
 	Action   VirtualWalletAction `json:"action"`                      // The action of the virtual wallet.
 	Protocol string              `json:"protocol,omitempty,omitzero"` // The protocol identifier (e.g. "openid4vp"). Required when |action| is "respond", forbidden otherwise.
 	Response jsontext.Value      `json:"response,omitempty,omitzero"`
+	FrameID  cdp.FrameID         `json:"frameId,omitempty,omitzero"` // The frame to scope the virtual wallet behavior to.
 }
 
 // SetVirtualWalletBehavior sets the behavior of the virtual wallet for
@@ -49,6 +50,12 @@ func (p SetVirtualWalletBehaviorParams) WithProtocol(protocol string) *SetVirtua
 // when |action| is "respond", forbidden otherwise.
 func (p SetVirtualWalletBehaviorParams) WithResponse(response jsontext.Value) *SetVirtualWalletBehaviorParams {
 	p.Response = response
+	return &p
+}
+
+// WithFrameID the frame to scope the virtual wallet behavior to.
+func (p SetVirtualWalletBehaviorParams) WithFrameID(frameID cdp.FrameID) *SetVirtualWalletBehaviorParams {
+	p.FrameID = frameID
 	return &p
 }
 
