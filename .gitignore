@@ -1,2 +1,6 @@
 *.json
 *.pdl
+
+# Local development tools
+/.opencode/
+/.playwright-mcp/
